@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metaarchit.wechat.nowait.dao.FeedBackDao">
+
+	<!-- 反饋表基本字段SQL語句（不包括id） -->
+	<sql id="baseSQL">
+		wxuserId, info, createDate,isRead
+	</sql>
+
+	<!-- 添加反饋記錄 -->
+	<insert id="insertFeedBack" parameterType="feedBack">
+		INSERT INTO
+		tb_feedback(<include refid="baseSQL"/>)
+		values(#{wxuserId}, #{info}, NOW(), '否')
+	</insert>
+	
+</mapper>

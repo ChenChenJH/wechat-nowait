@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metaarchit.wechat.nowait.dao.RestaurantDao">
+	<resultMap type="restaurant" id="restaurantMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="priceInfo" property="priceInfo" jdbcType="VARCHAR"/>
+		<result column="warnInfo" property="warnInfo" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="phone" property="phone" jdbcType="VARCHAR"/>
+		<result column="shopTime" property="shopTime" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="VARCHAR"/>
+		<result column="userId" property="userId" jdbcType="INTEGER"/>
+		<result column="chainName" property="chainName" jdbcType="VARCHAR"/>
+		<result column="coverPic" property="coverPic" jdbcType="VARCHAR"/>
+		<result column="navPic" property="navPic" jdbcType="VARCHAR"/>
+		<result column="lng" property="lng" jdbcType="DOUBLE"/>
+		<result column="lat" property="lat" jdbcType="DOUBLE"/>
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="isOverdue" property="isOverdue" jdbcType="VARCHAR"/>
+		<collection property="orders" column="id" select="com.metaarchit.wechat.nowait.dao.OrderDao.selectOrdersByRestId"/>
+		<collection property="desks" column="id" select="com.metaarchit.wechat.nowait.dao.DeskDao.selectDeskByRestId"/>
+	</resultMap>
+	
+	<!-- 基本字段語句（不包括id） -->
+	<sql id="baseSQL">
+		name, priceInfo, warnInfo, address, phone, shopTime, status, 
+		userId, chainName, coverPic, navPic, lng, lat, createDate,isOverdue
+	</sql>
+	
+	<!-- 根據條件查詢餐廳 -->
+	<select id="selectRestaurantsByCondition" resultMap="restaurantMap">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		<choose>
+			<when test="status">
+				WHERE status != '餐廳暫停取號'
+			</when>
+			<otherwise>
+				WHERE status LIKE CONCAT('%', '', '%')
+			</otherwise>
+		</choose>
+		<if test="isOverdue">
+			AND isOverdue = '1'
+		</if>
+	</select>
+	
+	<!-- 查詢所有過號不作廢的餐廳 -->
+	<select id="selectRestaurantsIsOverdue" resultMap="restaurantMap">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		WHERE
+		isOverdue = 1
+	</select>
+	
+	<!-- 根據餐廳Id獲取餐廳信息 -->
+	<select id="selectRestaurantById" resultMap="restaurantMap" parameterType="int">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		WHERE
+		id = #{id}
+	</select>
+	
+	<!-- 根據餐廳名稱模糊查詢餐廳信息 -->
+	<select id="selectRestaurantsLikeName" resultMap="restaurantMap" parameterType="string">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		WHERE
+		name
+		LIKE
+		CONCAT('%', #{name}, '%')
+	</select>
+	
+	<!-- 查詢所有餐廳信息 -->
+	<select id="selectAllRestaurant" resultMap="restaurantMap">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+	</select>
+		
+	<!-- 根據連鎖店名獲取餐廳信息 -->
+	<select id="selectRestaurantsByChainName" resultMap="restaurantMap" parameterType="string">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		WHERE
+		chainName = #{name}
+	</select>
+</mapper>

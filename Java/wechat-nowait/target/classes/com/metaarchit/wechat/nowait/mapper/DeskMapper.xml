@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metaarchit.wechat.nowait.dao.DeskDao">
+
+	<!-- 查詢所有座位信息 -->
+	<select id="selectAllDesk" resultType="desk">
+		SELECT
+		id, style, info, restId
+		FROM
+		tb_desk
+	</select>
+	
+	 <!-- 根據餐廳Id獲取座位信息 -->
+	 <select id="selectDeskByRestId" parameterType="int" resultType="desk">
+	 	SELECT
+	 	id, style, info, restId
+		FROM
+		tb_desk
+		WHERE
+		restId = #{id}
+	 </select>
+</mapper>

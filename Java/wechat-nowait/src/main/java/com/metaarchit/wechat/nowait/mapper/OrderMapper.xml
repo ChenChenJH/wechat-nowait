@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metaarchit.wechat.nowait.dao.OrderDao">
+	<resultMap type="order" id="orderMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="wxuserId" property="wxuserId" jdbcType="INTEGER"/>
+		<result column="restId" property="restId" jdbcType="INTEGER"/>
+		<result column="restName" property="restName" jdbcType="VARCHAR"/>
+		<result column="style" property="style" jdbcType="VARCHAR"/>
+		<result column="info" property="info" jdbcType="VARCHAR"/>
+		<result column="waitNo" property="waitNo" jdbcType="VARCHAR"/>
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="isUsage" property="isUsage" jdbcType="CHAR"/>
+		<result column="warnInfo" property="warnInfo" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 基本字段SQL語句 -->
+	<sql id="baseSQL">
+		id, wxuserId, restId, restName, style, info, waitNo, createDate, isUsage , warnInfo
+	</sql>
+	<!-- 基本字段SQL語句 不包括id -->
+	<sql id="SQLNoId">
+		wxuserId, restId, restName, style, info, waitNo, createDate, isUsage , warnInfo
+	</sql>
+	
+	<!-- 根據wxuserId查詢單條可用訂單 -->
+	<select id="selectOrderByWxUserId" parameterType="Integer" resultMap="orderMap">
+		SELECT <include refid="baseSQL"/>
+		FROM tb_order
+		WHERE wxuserId=#{wxuserId} AND isUsage='是'
+	</select>
+	
+	<!-- 根據restId（餐廳Id）查詢訂單信息 -->
+	<select id="selectOrdersByRestId" parameterType="Integer" resultMap="orderMap">
+		SELECT <include refid="baseSQL"/>
+		FROM tb_order
+		WHERE restId = #{id} AND isUsage='是'
+	</select>
+	
+	<!-- 根據restId、style、waitNo查詢排單數 -->
+	<select id="selectCountOfOrder" resultType="Integer">
+		SELECT COUNT(waitNo) 
+		FROM tb_order 
+		where restId=#{restId} 
+			AND isUsage='是' 
+			AND style=#{style}
+			AND waitNo<![CDATA[ < ]]>#{waitNo}
+		order by waitNo
+	</select>
+	
+	<!-- 插入壹條訂單記錄 -->
+	<insert id="insertOrder" >
+		INSERT INTO tb_order 
+			(<include refid="SQLNoId"/>) 
+		VALUES 
+			(#{wxuserId},
+			#{restId},
+			#{restName},
+			#{style},
+			#{info},
+			#{waitNo},
+			NOW(),
+			'是',
+			#{warnInfo})
+	</insert>
+	
+	<!-- 根據restId、style查詢最新訂單號 -->
+	<select id="selectWaitNoByRestIdAndStyle" resultType="String">
+		SELECT waitNo FROM tb_order 
+		WHERE restId=#{restId} AND style=#{style} AND isUsage='是'
+		ORDER BY waitNo desc 
+		LIMIT 1
+	</select>
+	
+	<!-- 根據restId、style、waitNo查詢排單數 -->
+	<select id="selectCountOfOrderByWxUserIdAndRestId" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM tb_order 
+		WHERE wxuserId=#{wxuserId} AND restId=#{restId} AND isUsage='是'
+	</select>
+	
+	<!-- 根據restId、style查詢餐廳可用訂單數量 -->
+	<select id="selectOrderCountByRestIdAndTableStyle" resultType="int">
+		SELECT COUNT(*)
+		FROM tb_order
+		WHERE restId = #{restId} AND style = #{tableStyle} AND isUsage = '是'
+	</select>
+	
+	<!-- 根據wxuserId、wxuserId修改訂單為不可用 -->
+	<update id="updateIsUsageByWxUserId">
+		 UPDATE tb_order SET isUsage='否' WHERE wxuserId=#{wxuserId} and restId=#{restId}
+	</update>
+</mapper>

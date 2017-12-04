@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metaarchit.wechat.nowait.dao.WxUserDao">
+	<resultMap type="wxUser" id="wxUserMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="openid" property="openid" jdbcType="VARCHAR"/>
+		<result column="phone" property="phone" jdbcType="VARCHAR"/>
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<!-- 基本字段SQL語句（不包括id） -->
+	<sql id="baseSQL">
+		openid, phone, createDate
+	</sql>
+
+	<!-- 查詢所有微信用戶 -->
+	<select id="selectAllWxUser" resultMap="wxUserMap">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_wxuser
+	</select>
+
+	<!-- 添加微信用戶 -->
+	<insert id="insertWxUser" parameterType="wxUser" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		tb_wxuser(<include refid="baseSQL"/>)
+		values(#{openid}, #{phone}, NOW())
+	</insert>
+
+	<!-- 查詢手機號是否已經存在數據庫中 -->
+	<select id="selectCountByPhone" parameterType="string" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		tb_wxuser
+		WHERE
+		phone = #{phone}
+	</select>
+	
+	<!-- 根據openId獲取用戶手機號 -->
+	<select id="selectPhoneByOpenId" parameterType="string" resultType="string">
+		SELECT
+		phone
+		FROM
+		tb_wxuser
+		WHERE
+		openid = #{openid}
+	</select>
+	
+	<!-- 根據openId查詢微信用戶Id -->
+	<select id="selectIdByOpenId" parameterType="string" resultType="int">
+		SELECT
+		id
+		FROM
+		tb_wxuser
+		WHERE
+		openid = #{openid}
+	</select>
+</mapper>
