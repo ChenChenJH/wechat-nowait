@@ -26,12 +26,18 @@ var app = Page({
               code: res.code  // 用戶code
             },
             success: function (result) {
-              console.log(result);
-              // 將虎丘到的用戶手機號存儲到本地緩存
-              wx.setStorage({
-                key: 'phone',
-                data: result.data.phone.substr(0, 1) + '****' + result.data.phone.substr(5, 7),
-              });
+              if (result.data.phone != null) {
+                // 將獲取到的用戶手機號存儲到本地緩存
+                wx.setStorage({
+                  key: 'phone',
+                  data: result.data.phone.substr(0, 1) + '****' + result.data.phone.substr(5, 7),
+                });
+              } else {
+                wx.setStorage({
+                  key: 'phone',
+                  data: '',
+                });
+              }
               // 將獲取到的用戶openId存儲到本地緩存
               wx.setStorage({
                 key: 'openid',
