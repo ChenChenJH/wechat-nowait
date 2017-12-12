@@ -45,6 +45,7 @@
 		<if test="isOverdue">
 			AND isOverdue = '1'
 		</if>
+		ORDER BY FIELD(status, '前方正在等待', '當前排隊狀況', '餐廳暫停取號')
 	</select>
 	
 	<!-- 查詢所有過號不作廢的餐廳 -->
@@ -95,5 +96,37 @@
 		tb_restaurant
 		WHERE
 		chainName = #{name}
+	</select>
+	
+	<!-- 分頁查詢餐廳信息 -->
+	<select id="selectRestaurantByLimit" resultMap="restaurantMap">
+		SELECT
+		*
+		FROM
+		tb_restaurant
+		LIMIT
+		#{start}, #{limit}
+	</select>
+	
+	<!-- 根據條件分頁查詢餐廳 -->
+	<select id="selectRestaurantsByConditionAndLimit" resultMap="restaurantMap">
+		SELECT
+		id, <include refid="baseSQL"/>
+		FROM
+		tb_restaurant
+		<choose>
+			<when test="status">
+				WHERE status != '餐廳暫停取號'
+			</when>
+			<otherwise>
+				WHERE status LIKE CONCAT('%', '', '%')
+			</otherwise>
+		</choose>
+		<if test="isOverdue">
+			AND isOverdue = '1'
+		</if>
+		ORDER BY FIELD(status, '前方正在等待', '當前排隊狀況', '餐廳暫停取號')
+		LIMIT
+		#{start}, #{limit}
 	</select>
 </mapper>

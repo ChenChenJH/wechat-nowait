@@ -27,7 +27,7 @@ Page({
       success: function (result) {
         console.log('成功獲取排隊單號');
         console.log(result);
-        if (result.data != 'error') {
+        if (result.data != 'noOrder') {
           that.setData({
             name: result.data.restName,
             date: result.data.createDate,

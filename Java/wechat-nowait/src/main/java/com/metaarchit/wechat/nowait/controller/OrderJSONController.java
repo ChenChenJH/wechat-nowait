@@ -50,7 +50,7 @@ public class OrderJSONController {
 		}
 		//當前無訂單
 		else {
-			return "error";
+			return "noOrder";
 		}
 	}
 	
@@ -70,8 +70,12 @@ public class OrderJSONController {
 		if (order != null) {
 			return "多余訂單";
 		} else {
-			restName = CommonUtil.encodeStr(restName);
-			warnInfo = CommonUtil.encodeStr(warnInfo);
+			if (CommonUtil.isMessyCode(restName)) {
+				restName = CommonUtil.encodeStr(restName);
+			}
+			if (CommonUtil.isMessyCode(warnInfo)) {
+				warnInfo = CommonUtil.encodeStr(warnInfo);
+			}
 			String waitNO;
 			waitNO = orderService.saveOrder(wxuserId, restId, restName, numberOfPeople, warnInfo);
 			if (!"".equals(waitNO)) 

@@ -5,33 +5,71 @@ Page({
    * 页面的初始数据
    */
   data: {
+    title: '',
+    tips: '',
+    modalHidden: true,
   },
   /**
    * 表單提交事件
    */
   formSubmit: function (e) {
     var that = this;
-    that.setData({
-      info: e.detail.value.textarea
-    })
-    wx.request({
-      url: that.data.url + '/wechat-nowait/feedBack/saveFeedBackInfo',
-      data: {
-        info: that.data.info,
-        wxuserId: that.data.wxuserId
-      },
-      success: function (res) {
-        console.log('反馈成功');
-        console.log(res.errMsg);
-        wx.switchTab({
-          url: '/pages/user/user',
-          success: function () {
-            var page = getCurrentPages().pop();
-            page.onLoad();
+    if (e.detail.value.textarea == '') {
+      console.log('反馈内容为空，不执行跳转');
+      that.setData({
+        title: '反饋失敗',
+        tips: '內容不能為空',
+        modalHidden: !that.data.modalHidden,
+      })
+    } else {
+      that.setData({
+        info: e.detail.value.textarea
+      })
+      wx.request({
+        url: that.data.url + '/wechat-nowait/feedBack/saveFeedBackInfo',
+        data: {
+          info: that.data.info,
+          wxuserId: that.data.wxuserId
+        },
+        success: function (res) {
+          console.log(res);
+          if (res.data == 'fail') {
+            console.log('反馈失败');
+            that.setData({
+              title: '反饋失敗',
+              tips: '壹天只能反饋壹次哦',
+              modalHidden: !that.data.modalHidden,
+            })
           }
-        })
-      }
+          else if (res.data == 'success') {
+            console.log('反馈成功');
+            that.setData({
+              title: '反饋成功',
+              tips: '',
+              modalHidden: !that.data.modalHidden,
+            })
+          }
+        }
+      })
+    }
+  },
+  //弹窗设置
+  modalBindaconfirm: function () {
+    this.setData({
+      modalHidden: !this.data.modalHidden,
     })
+  },
+  //返回上一頁 
+  reback: function () {//支付弹出的界面
+    if (this.data.tips != '內容不能為空') {
+      wx.switchTab({
+        url: '/pages/user/user',
+        success: function () {
+          var page = getCurrentPages().pop();
+          page.onLoad();
+        }
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -40,7 +78,7 @@ Page({
     var that = this;
     wx.getStorage({
       key: 'url',
-      success: function(res) {
+      success: function (res) {
         that.setData({
           url: res.data
         })

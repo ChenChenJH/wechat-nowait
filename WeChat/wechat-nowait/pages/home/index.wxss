@@ -61,7 +61,7 @@
 }
 .hot-list-img{
   height: 140rpx;
-  width: 160rpx;
+  width: 240rpx;
 }
 .nearby{
   margin-top: 30rpx;

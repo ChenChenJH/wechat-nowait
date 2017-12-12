@@ -2,7 +2,7 @@
   <template name="myList">
     <view class='list' id='{{idx}}' bindtap='oppenDetails'>
       <view class='list-img'>
-        <image src='/pages/images/tanyu.jpg'></image>
+        <image src='{{coverPic}}'></image>
       </view>
       <view class='list-msg'>
         <text class='list-msg-name'>{{name}}</text>

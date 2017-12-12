@@ -30,7 +30,7 @@ public class RestaurantTest extends BaseTest {
 //		for (Restaurant restaurant : restaurants) {
 //			System.out.println(restaurant.getName() + " " + restaurant.getStatus());
 //		}
-		List<Restaurant> restaurants = restaurantService.listAllRestaurant();
+		List<Restaurant> restaurants = restaurantDao.selectRestaurantsByConditionAndLimit(false, false, 0, 10);
 		for (Restaurant restaurant : restaurants) {
 			System.out.println(restaurant.toString());
 		}

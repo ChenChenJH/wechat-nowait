@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,8 @@ public class ChainShopJSONController {
 	@Resource
 	private ChainShopService chainShopService;
 	
+	private Logger logger = Logger.getLogger(ChainShopJSONController.class);
+	
 	/**
 	 * 根據連鎖店名稱模糊查詢連鎖店信息
 	 * @param longitude 當前位置經度
@@ -33,8 +36,11 @@ public class ChainShopJSONController {
 	 */
 	@RequestMapping(value="/showChainShopLikeName")
 	public @ResponseBody List<ChainShop> showChainShopLikeName(@RequestParam double longitude, @RequestParam double latitude, @RequestParam String name) {
-		// 格式化編碼，防止中文亂碼
-		name = CommonUtil.encodeStr(name);
+		logger.info("執行ChainShopJSONController中的showChainShopLikeName方法");
+		if (CommonUtil.isMessyCode(name)) {
+			// 格式化編碼，防止中文亂碼
+			name = CommonUtil.encodeStr(name);
+		}
 		List<ChainShop> chainShops = null;
 		if (!"".equals(name.trim())) {	// 判斷關鍵字是否為空
 			chainShops = chainShopService.listChainShopLikeName(longitude, latitude, name);

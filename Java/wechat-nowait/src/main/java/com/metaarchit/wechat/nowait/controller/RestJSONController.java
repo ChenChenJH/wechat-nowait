@@ -35,23 +35,7 @@ public class RestJSONController {
 	
 	@Value("#{configProperties['wechat.secret']}")
 	private String secret;
-	
-	/**
-	 * 根據條件篩選附近餐廳
-	 * @param longitude 當前位置經度
-	 * @param latitude 當前位置緯度
-	 * @param status 是否可手機取號，true代表是，false代表否
-	 * @param isOverdue 是否為過號不作廢，true代表是，false代表否
-	 * @return List<Restaurant> JSON格式的篩選后的餐廳列表
-	 */
-	@RequestMapping(value="/showRestaurantsByCondition")
-	public @ResponseBody List<Restaurant> showRestaurantsByCondition(@RequestParam double longitude, @RequestParam double latitude, @RequestParam("btn1") boolean status, @RequestParam("btn2") boolean isOverdue) {
-		System.out.println("可手機取號：" + status + "\n過號不作廢：" + isOverdue);
-		List<Restaurant> restaurants = null;
-		restaurants = restaurantService.listRestaurantsByCondition(longitude, latitude, status, isOverdue);
-		return restaurants;
-	}
-	
+
 	/**
 	 * 根據餐廳Id號獲取餐廳信息
 	 * @param longitude 當前位置經度
@@ -74,22 +58,6 @@ public class RestJSONController {
 	}
 	
 	/**
-	 * 根據餐廳名稱模糊獲取餐廳信息
-	 * @param name 餐廳名稱
-	 * @return List<Restaurant> JSON格式的餐廳信息列表
-	 */
-	@RequestMapping(value="/showRestaurantsLikeName")
-	public @ResponseBody List<Restaurant> showRestaurantsLikeName(String name) {
-		name = CommonUtil.encodeStr(name);
-		System.out.println("餐廳名稱：" + name);
-		List<Restaurant> restaurants = restaurantService.listRestaurantsLikeName(name);
-		for (Restaurant restaurant : restaurants) {
-			System.out.println(restaurant.toString());
-		}
-		return restaurants;
-	}
-	
-	/**
 	 * 獲取附近所有餐廳
 	 * @param longitude 當前位置的經度
 	 * @param latitude 當前位置的緯度
@@ -105,4 +73,26 @@ public class RestJSONController {
 		return restaurants;
 	}
 
+	
+	/**
+	 * 根據條件篩選分頁獲取附近餐廳信息
+	 * @param longitude 經度
+	 * @param latitude 緯度
+	 * @param start 開始行數
+	 * @param limit 信息總量
+	 * @param status 是否可手機取號，true代表是，false代表否
+	 * @param isOverdue 是否為過號不作廢，true代表是，false代表否
+	 * @return List<Restaurant> JSON格式的附近餐廳信息列表
+	 */
+	@RequestMapping(value="/showNearRestaurantByConditionAndLimit")
+	public @ResponseBody List<Restaurant> showNearRestaurantByConditionAndLimit(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam int start, @RequestParam int limit, @RequestParam("btn1") boolean status, @RequestParam("btn2") boolean isOverdue) {
+		List<Restaurant> restaurants = null;
+		System.out.println("可手機取號：" + status + "\n過號不作廢：" + isOverdue);
+		restaurants = restaurantService.listRestaurantByConditionAndLimit(longitude, latitude, status, isOverdue, start, limit);
+		System.out.println("---附近餐廳信息---\n數量：" + restaurants.size());
+		for (Restaurant restaurant : restaurants) {
+			System.out.println(restaurant.toString());
+		}
+		return restaurants;
+	}
 }

@@ -1,6 +1,8 @@
 package com.metaarchit.wechat.nowait.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 微信小程序通用工具類
@@ -8,6 +10,53 @@ import java.io.UnsupportedEncodingException;
  * @createTime 2017-11-13 20:18:05
  */
 public class CommonUtil {
+	
+	/**
+	 * 判斷字符是否為中文
+	 * @param c 字符
+	 * @return boolean 是否為中文
+	 */
+	public static boolean isChinese(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 判斷字符串是否亂碼
+	 * @param strName 字符串
+	 * @return boolean 是否為亂碼
+	 */
+	public static boolean isMessyCode(String strName) {
+		Pattern p = Pattern.compile("\\s*|t*|r*|n*");
+		Matcher m = p.matcher(strName);
+		String after = m.replaceAll("");
+		String temp = after.replaceAll("\\p{P}", "");
+		char[] ch = temp.trim().toCharArray();
+		float chLength = ch.length;
+		float count = 0;
+		for (int i = 0; i < ch.length; i++) {
+			char c = ch[i];
+			if (!Character.isLetterOrDigit(c)) {
+				if (!isChinese(c)) {
+					count = count + 1;
+				}
+			}
+		}
+		float result = count / chLength;
+		if (result > 0.4) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * 生成6位數驗證碼

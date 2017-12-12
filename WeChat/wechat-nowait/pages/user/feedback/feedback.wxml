@@ -8,4 +8,6 @@
       <button class='btn' formType="submit">提交</button>  
     </view>
   </form>
+<!-- 弹窗提示 -->  
+  <modal class="success-modal" title="{{title}}"  hidden="{{modalHidden}}" confirm-text="确定" no-cancel="true" bindconfirm="modalBindaconfirm" bindtap='reback'>{{tips}}</modal>
 </view>

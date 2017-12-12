@@ -4,9 +4,12 @@ var app = Page({
    * 页面的初始数据
    */
   data: {
+    // url: 'http://120.78.182.217',
     url: 'http://localhost:8080',
-    "selectedBtn1": false,
-    "selectedBtn2": false,
+    scrollTop: 0,
+    restaurants: [],
+    start: 0,
+    limit: 5
   },
 
   /**
@@ -88,49 +91,27 @@ var app = Page({
   },
 
   /**
-   * 根據“可手機取號”或者“過號不作廢”篩選餐廳
-   */
-  screeningNearRestaurant: function () {
-    var that = this;
-    var btn1 = this.data.selectedBtn1;  // 是否可手機取號，true代表是，false代表否
-    var btn2 = this.data.selectedBtn2;  // 是否為過號不作廢，true代表是，false代表否
-    if (!btn1 && !btn2) { // 當兩個按鈕都未選中時
-      this.showNearRestaurant();  // 調用當前js文件中的showNearRestaurant()方法
-    } else {  // 當兩個按鈕至少有一個選中時
-      // 發起網絡請求，調用服務器中的接口獲取篩選后的餐廳列表
-      wx.request({
-        url: that.data.url + '/wechat-nowait/restaurant/showRestaurantsByCondition',
-        data: {
-          longitude: that.data.longitude, // 當前位置經度
-          latitude: that.data.latitude, // 當前位置緯度
-          btn1: btn1, // 是否可手機取號
-          btn2: btn2  // 是否為過號不作廢
-        },
-        success: function (res) {
-          that.setData({
-            restaurants: res.data // 餐廳信息列表
-          })
-        }
-      })
-    }
-  },
-
-  /**
    * 顯示附近餐廳信息
    */
   showNearRestaurant: function () {
     var that = this;
     // 發起網絡請求，調用服務器接口獲取當前位置的附近餐廳列表
     wx.request({
-      url: that.data.url + '/wechat-nowait/restaurant/showNearRestaurant',
+      url: that.data.url + '/wechat-nowait/restaurant/showNearRestaurantByConditionAndLimit',
       data: {
         longitude: that.data.longitude, // 當前位置經度
-        latitude: that.data.latitude  // 當前位置緯度
+        latitude: that.data.latitude,  // 當前位置緯度
+        start: that.data.start,
+        limit: that.data.limit,
+        btn1: that.data.selectedBtn1,
+        btn2: that.data.selectedBtn2
       },
       success: function (result) {
         console.log(result);
         that.setData({
-          restaurants: result.data  // 餐廳信息列表
+          restaurants: result.data,  // 餐廳信息列表
+          start: that.data.start + that.data.limit,
+          searchLoading: true
         });
       },
       fail: function () {
@@ -189,7 +170,17 @@ var app = Page({
         selectedBtn1: false
       })
     }
-    _this.screeningNearRestaurant();
+    if (_this.data.selectedBtn1) {
+      console.log('已選中可手機取號');
+    } else {
+      console.log('未選中可手機取號');
+    }
+    _this.setData({
+      start: 0,
+      limit: 5,
+      hasNext: true
+    })
+    _this.showNearRestaurant();
   },
 
   /**
@@ -206,7 +197,17 @@ var app = Page({
         selectedBtn2: false
       })
     }
-    _this.screeningNearRestaurant();
+    if (_this.data.selectedBtn2) {
+      console.log('已選中過號不作廢');
+    } else {
+      console.log('未選中過號不作廢');
+    }
+    _this.setData({
+      start: 0,
+      limit: 5,
+      hasNext: true
+    })
+    _this.showNearRestaurant();
   },
 
   /**
@@ -214,6 +215,14 @@ var app = Page({
    */
   onLoad: function (options) {
     var that = this;
+    that.setData({
+      "selectedBtn1": false,
+      "selectedBtn2": false,
+      scrollTop: 0,
+      start: 0,
+      limit: 5,
+      hasNext: true
+    })
     // 設置服務器url地址
     wx.setStorage({
       key: 'url',
@@ -228,6 +237,14 @@ var app = Page({
           longitude: res.longitude, // 經度
           latitude: res.latitude  // 緯度
         });
+        wx.setStorage({
+          key: 'longitude',
+          data: res.longitude,
+        })
+        wx.setStorage({
+          key: 'latitude',
+          data: res.latitude,
+        })
         // 顯示附近餐廳信息
         that.showNearRestaurant();
         // 顯示連鎖店信息
@@ -272,14 +289,44 @@ var app = Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.onLoad();
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    var that = this;
+    console.log('到达底部')
+    wx.request({
+      url: that.data.url + '/wechat-nowait/restaurant/showNearRestaurantByConditionAndLimit',
+      data: {
+        longitude: that.data.longitude,
+        latitude: that.data.latitude,
+        start: that.data.start,
+        limit: that.data.limit,
+        btn1: that.data.selectedBtn1,
+        btn2: that.data.selectedBtn2
+      },
+      success: function (res) {
+        if (res.data.length > 0) {
+          console.log('加載中...')
+          var list = that.data.restaurants;
+          for (var i = 0; i < res.data.length; i++) {
+            list.push(res.data[i]);
+          }
+          that.setData({
+            restaurants: list,
+            start: that.data.start + that.data.limit,
+          })
+        } else {
+          console.log('沒有更多了')
+          that.setData({
+            hasNext: false
+          })
+        }
+      }
+    })
   },
 
   /**

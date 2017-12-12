@@ -1,5 +1,7 @@
 package com.metaarchit.wechat.nowait.controller;
 
+import java.text.ParseException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -28,13 +30,22 @@ public class FeedBackJSONController {
 	 * @param wxuserId 微信用戶Id
 	 * @param info 反饋內容
 	 * @return String
+	 * @throws ParseException 
 	 */
 	@RequestMapping("/saveFeedBackInfo")
-	public @ResponseBody String saveUserInfo(@RequestParam Integer wxuserId, @RequestParam String info) {
-		info = CommonUtil.encodeStr(info);
+	public @ResponseBody String saveUserInfo(@RequestParam Integer wxuserId, @RequestParam String info) throws ParseException {
+		if (CommonUtil.isMessyCode(info)) {
+			info = CommonUtil.encodeStr(info);
+		}
 		System.out.println("微信用戶Id：" + wxuserId + "\n反饋內容：" + info); 
-		FeedBack feedBack = new FeedBack(wxuserId, info);
-		feedBackService.saveFeedBack(feedBack);
-		return "success";
+		int flag = feedBackService.getFeedBackTime(wxuserId);
+		if(flag == -1 || flag == 1) {  //反饋成功
+			FeedBack feedBack = new FeedBack(wxuserId, info);
+			feedBackService.saveFeedBack(feedBack);
+			return "success";
+		}
+		else {
+			return "fail";   //反饋時間間隔不超過壹天，不予反饋
+		}
 	}
 }

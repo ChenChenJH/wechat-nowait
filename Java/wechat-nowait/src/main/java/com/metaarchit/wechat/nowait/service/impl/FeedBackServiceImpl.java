@@ -1,5 +1,9 @@
 package com.metaarchit.wechat.nowait.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +29,31 @@ public class FeedBackServiceImpl implements FeedBackService {
 	 */
 	public int saveFeedBack(FeedBack feedBack) {
 		return feedBackDao.insertFeedBack(feedBack);
+	}
+
+	/**
+	 * 獲取反饋時間間隔
+	 * @param wxUserId 微信用戶id
+	 * @return int -1：當前用戶沒有反饋記錄  0:反饋時間間隔不超過1天   1：超過1天
+	 */
+	public int getFeedBackTime(Integer wxUserId) throws ParseException {
+		String createDate = feedBackDao.selectCreateDateByWxUserId(wxUserId);
+		System.out.println("createDate："+createDate);
+		if(createDate == null) {  //找不到歷史反饋記錄
+			return -1;
+		}
+		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");  //規定日期格式，截取數據庫中的日期，去掉時間
+		String stringNowTime= format.format(new Date());
+	    Date nowTime = format.parse(stringNowTime);
+		Date createDateTime = format.parse(createDate);
+		System.out.println("nowTime："+nowTime);
+		System.out.println("createDateTime："+createDateTime);
+		long minus = nowTime.getTime() - createDateTime.getTime();
+		if(minus == 0) { //反饋時間間隔不超過1天
+			return 0;
+		} else {		//反饋時間間隔超過1天
+			return 1;
+		}
 	}
 
 }

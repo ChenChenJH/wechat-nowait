@@ -27,6 +27,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
+    console.log(JSON.parse(options.restaurants))
     var restaurants = JSON.parse(options.restaurants);  // 將String類型的餐廳列表轉換成JSON對象格式
     that.setData({
       restaurants: restaurants  // 餐廳信息列表

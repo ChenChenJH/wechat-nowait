@@ -14,4 +14,12 @@
 		values(#{wxuserId}, #{info}, NOW(), '否')
 	</insert>
 	
+	<!-- 通過微信用戶id獲取最新的壹條反饋記錄的時間 -->
+	<select id="selectCreateDateByWxUserId" parameterType="Integer" resultType="String">
+		SELECT createDate
+		FROM tb_feedback
+		WHERE wxuserId=#{wxuserId}
+		ORDER BY createDate desc
+		LIMIT 1;
+	</select>
 </mapper>

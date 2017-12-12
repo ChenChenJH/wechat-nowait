@@ -17,4 +17,11 @@ public interface FeedBackDao {
 	 * @return int 返回插入成功行數
 	 */
 	int insertFeedBack(FeedBack feedBack);
+	
+	/**
+	 * 通過微信用戶id獲取最新的壹條反饋記錄的時間
+	 * @param wxuserId 微信用護id
+	 * @return String 反饋時間
+	 */
+	String selectCreateDateByWxUserId(Integer wxuserId);
 }

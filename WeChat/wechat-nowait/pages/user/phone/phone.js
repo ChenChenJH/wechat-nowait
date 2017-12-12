@@ -27,6 +27,7 @@ Page({
    * 绑定手机
    */
   addBtn: function () {
+    var that = this;
     var phoneReg = this.data.phone;
     var codeReg = this.data.code;
     var userOpenid = this.data.openid;
@@ -68,7 +69,7 @@ Page({
       });
       // 將個人信息保存到數據庫
       wx.request({
-        url: 'http://localhost:8080/wechat-nowait/wxUser/saveUserInfo',
+        url: that.data.url + '/wechat-nowait/wxUser/saveUserInfo',
         data: {
           phone: phoneReg,
           openid: userOpenid,
@@ -80,6 +81,8 @@ Page({
               key: 'wxUserId',
               data: res.data,
             })
+          } else {
+            console.log('綁定失敗');
           }
         }
       })

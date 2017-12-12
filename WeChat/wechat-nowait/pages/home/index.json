@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "排隊不用等"
+  "navigationBarTitleText": "排隊不用等",
+  "enablePullDownRefresh": true
 }

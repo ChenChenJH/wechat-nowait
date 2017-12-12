@@ -68,12 +68,19 @@ Page({
         })
       },
     })
-    // 調用微信官方獲取當前位置接口
-    wx.getLocation({
+    wx.getStorage({
+      key: 'longitude',
+      success: function(res) {
+        that.setData({
+          longitude: res.data
+        })
+      },
+    })
+    wx.getStorage({
+      key: 'latitude',
       success: function (res) {
         that.setData({
-          longitude: res.longitude, // 當前位置經度
-          latitude: res.latitude  // 當前位置緯度
+          latitude: res.data
         })
       },
     })

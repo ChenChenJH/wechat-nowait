@@ -46,7 +46,7 @@ Page({
     wx.getStorage({
       key: 'phone',
       success: function(res) {
-        if (res.data == null) {
+        if (res.data == '') {
           wx.navigateTo({
             url: '/pages/user/phone/phone',
           })
@@ -182,7 +182,7 @@ Page({
     var that = this;
     var restaurant = JSON.parse(options.restaurant);  // 將string類型的餐廳對象轉換成JSON類型
     console.log(restaurant);
-    console.log(restaurant.desks[0].waitTableSum)
+    console.log(restaurant.desks[0].waitTableSum);
     var waitTime = ['--', '--', '--'];
     // 計算等待時間
     for (var i = 0; i < restaurant.desks.length; i++) {
@@ -192,7 +192,8 @@ Page({
     };
     that.setData({
       restaurant: restaurant, // 餐廳信息對象
-      waitTime: waitTime
+      waitTime: waitTime,
+      background: restaurant.navPic.split(",")
     });
     this.calculateDeskMaxPeople(restaurant.desks);
   },

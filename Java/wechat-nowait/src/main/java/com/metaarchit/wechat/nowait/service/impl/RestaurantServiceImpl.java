@@ -47,27 +47,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 	 * @param latitude 當前位置緯度
 	 * @return List<Restaurant> 附近餐廳信息列表
 	 */
-	public List<Restaurant> listNearRestaurants(Double longitude, Double latitude) {
+	public List<Restaurant> listNearRestaurants(double longitude, double latitude) {
 		List<Restaurant> restaurants = listAllRestaurant();
 		restaurants = setRestaurantDeskInfo(restaurants);
 		try {
 			restaurants = setRestaurantDistance(restaurants, longitude, latitude);
 		} catch(Exception e) {
 			e.printStackTrace();
-		}
-		return restaurants;
-	}
-
-	/**
-	 * 根據餐廳名稱模糊獲取餐廳信息
-	 * @param name 餐廳名稱
-	 * @return List<Restaurant> 餐廳信息列表
-	 */
-	public List<Restaurant> listRestaurantsLikeName(String name) {
-		List<Restaurant> restaurants = restaurantDao.selectRestaurantsLikeName(name);
-		restaurants = setRestaurantDeskInfo(restaurants);
-		if (restaurants.size() <= 0) {
-			System.out.println("查詢不到");
 		}
 		return restaurants;
 	}
@@ -109,29 +95,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	/**
-	 * 根據條件獲取附近餐廳列表
-	 * @param longitude 當前位置經度
-	 * @param latitude 當前位置緯度
-	 * @param status 是否可取號，true為可取，false為不可取
-	 * @param isOverdue 是否為過號不作廢，true為是，false為否
-	 * @return List<Restaurant> 篩選後的餐廳列表
-	 */
-	public List<Restaurant> listRestaurantsByCondition(double longitude, double latitude, boolean status,
-			boolean isOverdue) {
-		List<Restaurant> restaurants = null;
-		restaurants = restaurantDao.selectRestaurantsByCondition(status, isOverdue);
-		restaurants = setRestaurantDeskInfo(restaurants);
-		Collections.sort(restaurants);
-		try {
-			restaurants = setRestaurantDistance(restaurants, longitude, latitude);
-		} catch (Exception e) {
-			System.out.println("設置餐廳列表出錯！");
-			e.printStackTrace();
-		}
-		return restaurants;
-	}
-
-	/**
 	 * 對餐廳列表中各個餐廳的桌子進行從小桌到大桌排序，并設置各類型桌子的等待數量以及所有桌子的等待總量
 	 * @param restaurants 餐廳列表
 	 * @return List<Restaurant> 對桌子排序后的餐廳信息列表
@@ -159,6 +122,55 @@ public class RestaurantServiceImpl implements RestaurantService {
 			restaurant.setWaitTableSum(count);
 			restaurant.setDesks(desks);
 		}
+		return restaurants;
+	}
+
+	/**
+	 * 通過分頁查詢獲取附近餐廳信息
+	 * @param start 開始位置
+	 * @param limit 信息數量
+	 * @param longtitude 經度
+	 * @param latitude 緯度
+	 * @return List<Restaurant> 附近餐廳信息列表
+	 */
+	public List<Restaurant> listRestaurantByLimit(int start, int limit,
+			double longitude, double latitude) {
+		List<Restaurant> restaurants = null;
+		restaurants = restaurantDao.selectRestaurantByLimit(start, limit);
+		restaurants = setRestaurantDeskInfo(restaurants);
+		try {
+			restaurants = setRestaurantDistance(restaurants, longitude, latitude);
+		} catch (Exception e) {
+			System.out.println("設置距離出錯！");
+			e.printStackTrace();
+		}
+		Collections.sort(restaurants);
+		return restaurants;
+	}
+
+	/**
+	 * 通過條件篩選以及分頁查詢獲取附近餐廳信息
+	 * @param longitude 經度
+	 * @param latitude 緯度
+	 * @param status 是否可取號，true為可取，false為不可取
+	 * @param isOverdue 是否為過號不作廢，true為是，false為否
+	 * @param start 開始位置
+	 * @param limit 信息數量
+	 * @return List<Restaurant> 附近餐廳信息列表
+	 */
+	public List<Restaurant> listRestaurantByConditionAndLimit(double longitude,
+			double latitude, boolean status, boolean isOverdue, int start,
+			int limit) {
+		List<Restaurant> restaurants = null;
+		restaurants = restaurantDao.selectRestaurantsByConditionAndLimit(status, isOverdue, start, limit);
+		restaurants = setRestaurantDeskInfo(restaurants);
+		try {
+			restaurants = setRestaurantDistance(restaurants, longitude, latitude);
+		} catch (Exception e) {
+			System.out.println("屬性設置出錯！");
+			e.printStackTrace();
+		}
+		Collections.sort(restaurants);
 		return restaurants;
 	}
 }

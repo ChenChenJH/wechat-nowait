@@ -15,12 +15,14 @@ import com.metaarchit.wechat.nowait.model.Restaurant;
 public interface RestaurantDao {
 	
 	/**
-	 * 根據“可手機取號”以及“過號不作廢”查詢餐廳信息
+	 * 根據“可手機取號”、“過號不作廢”以及LIMIT查詢餐廳信息
 	 * @param status 為true表示“可手機取號”
 	 * @param isOverdue 為true表示“過號不作廢”
+	 * @param start 開始位置
+	 * @param limit 信息數量
 	 * @return List<Restaurant> 餐廳信息列表
 	 */
-	List<Restaurant> selectRestaurantsByCondition(@Param("status") boolean status, @Param("isOverdue") boolean isOverdue);
+	List<Restaurant> selectRestaurantsByConditionAndLimit(@Param("status") boolean status, @Param("isOverdue") boolean isOverdue, @Param("start") int start, @Param("limit") int limit);
 
 	/**
 	 * 根據Id獲取餐廳信息
@@ -30,17 +32,18 @@ public interface RestaurantDao {
 	Restaurant selectRestaurantById(int id);
 	
 	/**
-	 * 根據餐廳名模糊查詢餐廳信息
-	 * @param name 餐廳名
-	 * @return List<Restaurant> 模糊查詢後的餐廳信息列表
-	 */
-	List<Restaurant> selectRestaurantsLikeName(String name);
-	
-	/**
 	 * 查詢所有餐廳信息
 	 * @return List<Restaurant> 餐廳信息列表
 	 */
 	List<Restaurant> selectAllRestaurant();
+	
+	/**
+	 * 分頁查詢餐廳信息
+	 * @param start 開始位置
+	 * @param limit 信息數量
+	 * @return List<Restaurant> 餐廳信息列表
+	 */
+	List<Restaurant> selectRestaurantByLimit(@Param("start") int start, @Param("limit") int limit);
 	
 	/**
 	 * 根據連鎖店名稱查詢餐廳信息
@@ -48,11 +51,5 @@ public interface RestaurantDao {
 	 * @return List<Restaurant> 餐廳信息列表
 	 */
 	List<Restaurant> selectRestaurantsByChainName(String name);
-	
-	/**
-	 * 增加新的餐廳信息
-	 * @param restaurant Restaurant類對象
-	 * @return 插入條數
-	 */
-	int insertRestaurant(@Param("restaurant") Restaurant restaurant);
+
 }

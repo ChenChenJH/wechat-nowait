@@ -48,7 +48,7 @@ Page({
         key: 'phone',
         success: function (res) {  // 已綁定手機號
           // 跳轉至我的排隊單號界面
-          if (res.data != null) {
+          if (res.data != '') {
             wx.navigateTo({
               url: '/pages/user/myNum/myNum',
             })
@@ -71,7 +71,7 @@ Page({
       wx.getStorage({
         key: 'phone',
         success: function (res) {
-          if (res.data != null) {
+          if (res.data != '') {
             console.log("用戶已綁定手機號");
           } else {
             wx.navigateTo({
@@ -91,7 +91,7 @@ Page({
         key: 'phone',
         success: function(res) {  // 已綁定手機號
           // 跳轉至意見反饋界面
-          if (res.data != null) {
+          if (res.data != '') {
             wx.navigateTo({
               url: '/pages/user/feedback/feedback',
             })
@@ -136,7 +136,7 @@ Page({
         wx.getStorage({
           key: 'phone',
           success: function (result) {
-            if (result.data == null) {
+            if (result.data == '') {
               console.log('用戶未綁定手機號');
             }
             _this.setData({
