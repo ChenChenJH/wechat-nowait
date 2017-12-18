@@ -1,8 +1,11 @@
 <!--pages/template/template.wxml-->
   <template name="myList">
-    <view class='list' id='{{idx}}' bindtap='oppenDetails'>
+    <view class='list' data-y='{{idy}}' id='{{idx}}' bindtap='oppenDetails'>
       <view class='list-img'>
-        <image src='{{coverPic}}'></image>
+        <view class='list-img-border'>
+          <image src='{{coverPic}}'></image>
+        </view>
+        
       </view>
       <view class='list-msg'>
         <text class='list-msg-name'>{{name}}</text>

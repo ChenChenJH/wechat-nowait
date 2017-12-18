@@ -6,7 +6,7 @@
     <input bindinput='searchRest' type='text' class='search-input' placeholder-class='phClass' placeholder='搜索餐厅' focus='true' confirm-type='search' value='{{ inputValue }}'></input>
     <image src='/pages/images/clear.png' class='clear' bindtap='clear'></image>
     </view>
-     <!-- <text class='search-text'>取消</text> -->
+      <text bindtap='toRests' class='search-text'>搜索</text> 
   </view>
   <view wx:for="{{chainShops}}" wx:for-item="chainShop" wx:key="key" wx:for-index="i">
     <view class='searchList' wx:for="{{chainShop.restaurants}}" wx:for-item="restaurant" wx:key="key" wx:for-index="j">
@@ -14,3 +14,4 @@
     </view>
   </view>
 </view>
+<modal class="success-modal" title="{{title}}"  hidden="{{modalHidden}}" confirm-text="确定" no-cancel="true" bindconfirm="modalBindaconfirm" bindtap='closeTips'>{{tips}}</modal>

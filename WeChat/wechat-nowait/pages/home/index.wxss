@@ -29,7 +29,7 @@
 }
 .top-text{
   border-bottom: 1rpx solid #e6e6e6;
-  padding: 42rpx 0rpx 23rpx 0rpx;
+  padding: 23rpx 0rpx 23rpx 0rpx;
   font-size: 26rpx;
   background-color: #fff;
 }
@@ -49,19 +49,26 @@
 .hot-grid-list{
   flex: 1;
   font-size: 28rpx;
-   border-right: 1rpx solid rgb(244, 244, 244);
+  border-right: 1rpx solid rgb(244, 244, 244);
   border-bottom: 1rpx solid rgb(244, 244, 244); 
-  height: 191rpx;
-}
-.hot-grid-list text{
-  font-size: 28rpx;
-}
-.hot-grid-img{
+  height: 190rpx;
+  overflow: hidden;
+  white-space: nowrap;    /*解决文字溢出*/
+  text-overflow:ellipsis;
+  padding-top: 20rpx;
 
 }
+.hot-grid-text{
+  margin-left: 10rpx;
+  margin-right: 10rpx;
+}
+.hot-grid-img{
+  padding-bottom: 10rpx;
+}
 .hot-list-img{
-  height: 140rpx;
-  width: 240rpx;
+  height: 120rpx;
+  width: 200rpx;
+  border-radius: 10rpx;
 }
 .nearby{
   margin-top: 30rpx;

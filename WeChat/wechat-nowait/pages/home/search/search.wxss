@@ -9,7 +9,7 @@ page{
 }
 .searchbar{
   height: 56rpx;
-  width: 98%;
+  width: 85%;
   background-color: #fff;
   display: flex;
   border-radius: 10rpx;
@@ -35,9 +35,10 @@ page{
   margin: 15rpx 11rpx 0rpx 16rpx;
 }
 .search-text{
-  font-size: 34rpx;
+  font-size: 30rpx;
   color: #e9aa2f;
   margin: 0 auto;
+  padding-top: 5rpx;
 }
 .searchList{
   color: #666666;

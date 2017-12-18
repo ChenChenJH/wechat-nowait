@@ -5,7 +5,43 @@ Page({
    * 页面的初始数据
    */
   data: {
+    modalHidden: true,
+    tips: '搜索內容為空',
+    chainShops: null
+  },
 
+  /**
+   * 關閉提示信息
+   */
+  closeTips: function () {
+    this.setData({
+      modalHidden: true,
+    })
+  },
+
+  /**
+   * 跳轉至搜索詳情界面
+   */
+  toRests: function () {
+    var that = this;
+    var chainShops = that.data.chainShops;
+    var value = this.data.value;
+    if (value == null || value == "") {
+      that.setData({
+        tips: '請輸入關鍵詞',
+        modalHidden: false
+      })
+    } else if (chainShops == null || chainShops.length == 0) {
+      that.setData({
+        tips: '所搜索的餐廳不存在',
+        modalHidden: false
+      })
+    } else {
+      chainShops = JSON.stringify(chainShops);
+      wx.navigateTo({
+        url: 'restaurants/restaurants?chainShops=' + chainShops,
+      })
+    }
   },
 
   /**
@@ -27,6 +63,9 @@ Page({
   searchRest: function (event) {
     var that = this;
     var value = event.detail.value; // 關鍵字
+    that.setData({
+      value: value
+    })
     // 發起網絡請求，調用服務器中的接口獲取根據關鍵字查詢的餐廳連鎖店列表
     wx.request({
       url: that.data.url + '/wechat-nowait/chainShop/showChainShopLikeName',
@@ -39,6 +78,7 @@ Page({
         that.setData({
           chainShops: res.data  // 連鎖店列表
         })
+        console.log(res)
       }
     })
   },
@@ -50,7 +90,8 @@ Page({
     var _this = this;
     _this.setData({
       inputValue: '',
-      chainShops: ''
+      chainShops: '',
+      value: ''
     })
   },
 

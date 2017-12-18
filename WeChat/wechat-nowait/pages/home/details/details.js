@@ -137,7 +137,6 @@ Page({
    * 計算餐廳座位最大人數
    */
   calculateDeskMaxPeople: function (desks) {
-    console.log(desks);
     var desk = desks[desks.length - 1];
     desk.info = desk.info.replace("人", "");
     var maxPeople = desk.info.split("-")[1];

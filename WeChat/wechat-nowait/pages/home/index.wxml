@@ -17,8 +17,8 @@
           <view class='hot-grid-list' wx:for="{{[0, 1, 2]}}" wx:for-item="i" wx:key="key" id="{{i}}" bindtap='branch'>
             <view class='hot-grid-img'>
               <image src='{{chainShops[i].pic}}' class='hot-list-img'></image>
-            </view> 
-            <text>{{chainShops[i].name}}</text>
+            </view>
+            <text class='hot-grid-text'>{{chainShops[i].name}}</text>
           </view>
         </view>
         <view class='hot-grid'>
@@ -26,7 +26,7 @@
             <view class='hot-grid-img'>
               <image src='{{chainShops[i].pic}}' class='hot-list-img'></image>
             </view> 
-            <text>{{chainShops[i].name}}</text>
+            <text class='hot-grid-text'>{{chainShops[i].name}}</text>
           </view>
         </view>
   </view>

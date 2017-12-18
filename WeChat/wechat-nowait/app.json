@@ -11,8 +11,8 @@
     "pages/logs/logs",
     "pages/user/contact/contact",
     "pages/user/feedback/feedback",
-    "pages/template/template"
-    
+    "pages/template/template",
+    "pages/home/search/restaurants/restaurants"
   ],
   "window": {
     "backgroundTextStyle": "light",
