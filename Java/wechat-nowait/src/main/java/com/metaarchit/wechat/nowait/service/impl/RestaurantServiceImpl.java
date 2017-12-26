@@ -111,6 +111,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 			count = 0;
 			restaurant = (Restaurant) itRestaurants.next();
 			desks = restaurant.getDesks();
+			System.out.println(desks.toString());
 			Collections.sort(desks);
 			itDesks = desks.iterator();
 			while (itDesks.hasNext()) {

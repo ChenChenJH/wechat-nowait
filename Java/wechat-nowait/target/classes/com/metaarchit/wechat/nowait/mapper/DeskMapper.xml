@@ -18,5 +18,6 @@
 		tb_desk
 		WHERE
 		restId = #{id}
+		and info != '0'
 	 </select>
 </mapper>
