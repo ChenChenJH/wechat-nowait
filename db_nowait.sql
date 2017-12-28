@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50045
 File Encoding         : 65001
 
-Date: 2017-12-26 17:06:13
+Date: 2017-12-28 15:52:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -201,7 +201,7 @@ CREATE TABLE `tb_order` (
   `isUsage` char(2) NOT NULL,
   `warnInfo` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_order
@@ -251,6 +251,8 @@ INSERT INTO `tb_order` VALUES ('58', '21', '14', '岳阳烧烤(科干店)', '大
 INSERT INTO `tb_order` VALUES ('59', '32', '14', '岳阳烧烤(科干店)', '小桌', '1-2人', 'C04', '2017-12-12 08:58:38', '否', '過號不作廢');
 INSERT INTO `tb_order` VALUES ('60', '32', '14', '岳阳烧烤(科干店)', '小桌', '1-2人', 'C04', '2017-12-12 09:22:30', '否', '過號不作廢');
 INSERT INTO `tb_order` VALUES ('61', '32', '14', '岳阳烧烤(科干店)', '小桌', '1-2人', 'C04', '2017-12-12 09:23:20', '是', '過號不作廢');
+INSERT INTO `tb_order` VALUES ('62', '34', '22', '测试餐厅1号', '大桌', '5-8人', 'A01', '2017-12-28 15:31:42', '是', '過號不作廢');
+INSERT INTO `tb_order` VALUES ('63', '35', '22', '测试餐厅1号', '中桌', '3-4人', 'B01', '2017-12-28 15:45:03', '是', '過號不作廢');
 
 -- ----------------------------
 -- Table structure for tb_restaurant
@@ -355,13 +357,12 @@ CREATE TABLE `tb_wxuser` (
   `phone` varchar(11) NOT NULL,
   `createDate` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_wxuser
 -- ----------------------------
 INSERT INTO `tb_wxuser` VALUES ('1', 'gh_1564612sd', '13420156345', '2017-10-12 12:45:41');
-INSERT INTO `tb_wxuser` VALUES ('2', 'oyYPs0EGJw3rK0vVXXZ-dWgHxv-s', '60147891', '2017-11-27 17:11:49');
 INSERT INTO `tb_wxuser` VALUES ('3', 'test123', '13536403516', '2017-12-07 20:32:32');
 INSERT INTO `tb_wxuser` VALUES ('4', 'test1234', '13536403516', '2017-12-07 20:33:22');
 INSERT INTO `tb_wxuser` VALUES ('5', 'test1235', '13536403516', '2017-12-07 20:33:22');
@@ -384,4 +385,5 @@ INSERT INTO `tb_wxuser` VALUES ('25', 'test3235', '13536403516', '2017-12-07 20:
 INSERT INTO `tb_wxuser` VALUES ('26', 'test3236', '13536403516', '2017-12-07 20:35:49');
 INSERT INTO `tb_wxuser` VALUES ('30', 'test0012', '13536403518', '2017-12-08 14:44:48');
 INSERT INTO `tb_wxuser` VALUES ('31', 'aa0104', '13536403519', '2017-12-08 14:48:06');
-INSERT INTO `tb_wxuser` VALUES ('32', 'oXWki0bwAlqY-LOiGG5EEhmW4gw0', '66494498', '2017-12-12 08:56:37');
+INSERT INTO `tb_wxuser` VALUES ('33', 'undefined', '60147892', '2017-12-28 15:25:58');
+INSERT INTO `tb_wxuser` VALUES ('35', 'oyYPs0EGJw3rK0vVXXZ-dWgHxv-s', '60147891', '2017-12-28 15:44:46');
