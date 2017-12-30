@@ -37,6 +37,24 @@ public class RestJSONController {
 	private String secret;
 
 	/**
+	 * 根據餐廳名稱模糊獲取餐廳列表
+	 * @param name 餐廳名稱
+	 * @param longitude 經度
+	 * @param latitude 緯度
+	 * @return List<Restaurant> JSON格式的附近餐廳信息列表
+	 */
+	@RequestMapping(value="/showRestaurantLikeName")
+	public @ResponseBody List<Restaurant> showRestrantLikeName(@RequestParam String name, @RequestParam double longitude, @RequestParam double latitude) {
+		List<Restaurant> restaurants = null;
+		if (CommonUtil.isMessyCode(name)) {
+			// 格式化編碼，防止中文亂碼
+			name = CommonUtil.encodeStr(name);
+		}
+		restaurants = restaurantService.listRestaurantLikeName(longitude, latitude, name);
+		return restaurants;
+	}
+	
+	/**
 	 * 根據餐廳Id號獲取餐廳信息
 	 * @param longitude 當前位置經度
 	 * @param latitude 當前位置緯度

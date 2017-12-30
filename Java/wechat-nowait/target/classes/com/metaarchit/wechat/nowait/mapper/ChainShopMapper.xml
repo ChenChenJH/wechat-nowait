@@ -12,8 +12,14 @@
 	<select id="selectAllChainShop" resultMap="chainShopMap">
 		SELECT
 		id, name, pic
-		FROM
-		tb_chainshop
+	    FROM
+        tb_chainshop t 
+        ORDER BY (
+            SELECT COUNT(id) FROM 
+            tb_restaurant 
+            WHERE
+            chainName = t.name)
+        DESC LIMIT 0,6
 	</select>
 	
 	<!-- 根據連鎖店名稱模糊查詢連鎖店信息 -->

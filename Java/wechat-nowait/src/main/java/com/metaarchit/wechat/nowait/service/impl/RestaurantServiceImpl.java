@@ -174,4 +174,25 @@ public class RestaurantServiceImpl implements RestaurantService {
 		Collections.sort(restaurants);
 		return restaurants;
 	}
+
+	/**
+	 * 通過餐廳名稱模糊獲取餐廳列表
+	 * @param longitude 經度
+	 * @param latitude 緯度
+	 * @param name 餐廳名
+	 * @return List<Restaurant> 附近餐廳信息列表
+	 */
+	public List<Restaurant> listRestaurantLikeName(double longitude, double latitude, String name) {
+		List<Restaurant> restaurants = null;
+		restaurants = restaurantDao.selectRestaurantsLikeName(name);
+		restaurants = setRestaurantDeskInfo(restaurants);
+		try {
+			restaurants = setRestaurantDistance(restaurants, longitude, latitude);
+		} catch (Exception e) {
+			System.out.println("屬性設置出錯！");
+			e.printStackTrace();
+		}
+		Collections.sort(restaurants);
+		return restaurants;
+	}
 }

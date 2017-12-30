@@ -55,4 +55,13 @@ public interface RestaurantService {
 	 * @return List<Restaurant> 附近餐廳信息列表
 	 */
 	List<Restaurant> listRestaurantByConditionAndLimit(double longitude, double latitude, boolean status, boolean isOverdue, int start, int limit);
+
+	/**
+	 * 通過餐廳名稱模糊獲取餐廳列表
+	 * @param longitude 經度
+	 * @param latitude 緯度
+	 * @param name 餐廳名
+	 * @return List<Restaurant> 附近餐廳信息列表
+	 */
+	List<Restaurant> listRestaurantLikeName(double longitude, double latitude, String name);
 }
